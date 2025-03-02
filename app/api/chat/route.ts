@@ -11,6 +11,7 @@ import { RunnableSequence } from '@langchain/core/runnables'
 import { formatDocumentsAsString } from 'langchain/util/document';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { MemoryVectorStore } from 'langchain/vectorstores/memory';
+import { NextResponse } from 'next/server';
 
 const loader = new JSONLoader( 'data/dictionary.json', ["/title", "/content"]);
 
@@ -31,7 +32,24 @@ Current conversation: {chat_history}
 user: {question}
 jAI:`;
 
+export async function OPTIONS() {
+    return NextResponse.json({}, {
+        status: 200,
+        headers: {
+            "Access-Control-Allow-Origin": "*", 
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        },
+    });
+}
+
 export async function POST(req: Request) {
+    const corsHeaders = {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    };
+
     try {
         // Extract the `messages` from the body of the request
         const { messages } = await req.json();
@@ -40,7 +58,6 @@ export async function POST(req: Request) {
 
         // Load the documents
         const docs = await loader.load();
-        
         
         const splitter = new RecursiveCharacterTextSplitter({
             chunkSize: 1000, chunkOverlap: 200
@@ -96,8 +113,18 @@ export async function POST(req: Request) {
             },
         });
 
-        return LangChainAdapter.toDataStreamResponse(textStream);
+        const response = LangChainAdapter.toDataStreamResponse(textStream);
+        
+        // Add CORS headers to the response
+        Object.entries(corsHeaders).forEach(([key, value]) => {
+            response.headers.set(key, value);
+        });
+
+        return response;
     } catch (e: any) {
-        return Response.json({ error: e.message }, { status: e.status ?? 500 });
+        return Response.json({ error: e.message }, { 
+            status: e.status ?? 500,
+            headers: corsHeaders
+        });
     }
 }
