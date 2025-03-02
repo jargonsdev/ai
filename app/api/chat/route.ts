@@ -1,19 +1,24 @@
 import { LangChainAdapter } from 'ai';
-import { ChatOpenAI } from '@langchain/openai';
+import { ChatOpenAI, OpenAIEmbeddings } from '@langchain/openai';
 import { PromptTemplate } from '@langchain/core/prompts';
 import { HttpResponseOutputParser } from 'langchain/output_parsers';
 
 import { formatMessage } from '@/lib/utils';
-import data from '@/data/dictionary.json';
+import DICTIONARY_DATA from '@/data/dictionary.json';
 
 import { JSONLoader } from "langchain/document_loaders/fs/json";
 import { RunnableSequence } from '@langchain/core/runnables'
 import { formatDocumentsAsString } from 'langchain/util/document';
+import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
+import { MemoryVectorStore } from 'langchain/vectorstores/memory';
 
-const loader = new JSONLoader(
-    "../../data/dictionary.json",
-    ["title", "content"],
-);
+const loader = new JSONLoader( 'data/dictionary.json', ["/title", "/content"]);
+
+const embeddings = new OpenAIEmbeddings({
+    model: "text-embedding-3-large"
+});
+
+const vectorStore = new MemoryVectorStore(embeddings);
 
 export const dynamic = 'force-dynamic'
 
@@ -35,6 +40,15 @@ export async function POST(req: Request) {
 
         // Load the documents
         const docs = await loader.load();
+        
+        
+        const splitter = new RecursiveCharacterTextSplitter({
+            chunkSize: 1000, chunkOverlap: 200
+        });
+
+        const allSplits = await splitter.splitDocuments(docs);    
+
+        await vectorStore.addDocuments(allSplits);
 
         // Create a prompt template
         const prompt = PromptTemplate.fromTemplate(TEMPLATE);
@@ -48,6 +62,8 @@ export async function POST(req: Request) {
             verbose: true,
         });
 
+        const similarDocs = await vectorStore.similaritySearch(currentMessageContent);
+
         // Create the parser - parses the response from the model into http-friendly format
         const parser = new HttpResponseOutputParser();
 
@@ -56,7 +72,7 @@ export async function POST(req: Request) {
             {
                 question: (input) => input.question,
                 chat_history: (input) => input.chat_history,
-                context: () => formatDocumentsAsString(docs),
+                context: () => formatDocumentsAsString(similarDocs),
             },
             prompt,
             model,
