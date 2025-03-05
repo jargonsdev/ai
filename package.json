@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@langchain/openai": "^0.4.4",
+    "@langchain/qdrant": "^0.1.1",
     "ai": "^4.0.33",
     "langchain": "^0.3.19",
     "next": "15.1.4"
