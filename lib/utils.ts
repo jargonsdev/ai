@@ -1,4 +1,4 @@
-import type { Message } from 'ai';
+import type { Message } from "ai";
 
 /**
  * Formats a message into a string
@@ -6,5 +6,5 @@ import type { Message } from 'ai';
  * @returns The formatted message
  */
 export const formatMessage = (message: Message) => {
-    return `${message.role}: ${message.content}`;
+  return `${message.role}: ${message.content}`;
 };
