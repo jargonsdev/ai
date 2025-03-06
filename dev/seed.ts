@@ -2,8 +2,7 @@ import fetch from "node-fetch";
 import fs from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { OpenAIEmbeddings } from '@langchain/openai';
-import { QdrantVectorStore } from "@langchain/qdrant";
+import vectorStore from "@/lib/vector-store";
 import { JSONLoader } from "langchain/document_loaders/fs/json";
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 
@@ -18,17 +17,6 @@ console.log(`Saved the dictionary file to ${path}`);
 
 // Load the dictionary from the file system
 const loader = new JSONLoader( 'dev/dictionary.json', ["/title", "/content"]);
-
-// Initialize the OpenAI embeddings
-const embeddings = new OpenAIEmbeddings({
-    model: process.env.OPENAI_EMBEDDINGS_MODEL,
-});
-
-// Load or create the vector store collection
-const vectorStore = await QdrantVectorStore.fromExistingCollection(embeddings, {
-    url: process.env.QDRANT_URL,
-    collectionName: "dictionary",
-});
 
 // Load the documents
 const docs = await loader.load();

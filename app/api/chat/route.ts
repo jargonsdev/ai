@@ -1,25 +1,12 @@
 import { LangChainAdapter } from 'ai';
-import { ChatOpenAI, OpenAIEmbeddings } from '@langchain/openai';
-import { PromptTemplate } from '@langchain/core/prompts';
-import { HttpResponseOutputParser } from 'langchain/output_parsers';
-
+import { NextResponse } from 'next/server';
 import { formatMessage } from '@/lib/utils';
-import DICTIONARY_DATA from '@/data/dictionary.json';
-
-import { JSONLoader } from "langchain/document_loaders/fs/json";
+import vectorStore from '@/lib/vector-store';
+import { ChatOpenAI } from '@langchain/openai';
+import { PromptTemplate } from '@langchain/core/prompts';
 import { RunnableSequence } from '@langchain/core/runnables'
 import { formatDocumentsAsString } from 'langchain/util/document';
-import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
-import { MemoryVectorStore } from 'langchain/vectorstores/memory';
-import { NextResponse } from 'next/server';
-
-const loader = new JSONLoader( 'data/dictionary.json', ["/title", "/content"]);
-
-const embeddings = new OpenAIEmbeddings({
-    model: "text-embedding-3-large"
-});
-
-const vectorStore = new MemoryVectorStore(embeddings);
+import { HttpResponseOutputParser } from 'langchain/output_parsers';
 
 export const dynamic = 'force-dynamic'
 
@@ -56,29 +43,19 @@ export async function POST(req: Request) {
         const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
         const currentMessageContent = messages[messages.length - 1].content;
 
-        // Load the documents
-        const docs = await loader.load();
-        
-        const splitter = new RecursiveCharacterTextSplitter({
-            chunkSize: 1000, chunkOverlap: 200
-        });
-
-        const allSplits = await splitter.splitDocuments(docs);    
-
-        await vectorStore.addDocuments(allSplits);
-
         // Create a prompt template
         const prompt = PromptTemplate.fromTemplate(TEMPLATE);
 
         // Create the model
         const model = new ChatOpenAI({
             apiKey: process.env.OPENAI_API_KEY!,
-            model: 'gpt-3.5-turbo',
+            model: process.env.CHAT_MODEL!,
             temperature: 0,
             streaming: true,
             verbose: true,
         });
 
+        // Get similar documents from the vector store
         const similarDocs = await vectorStore.similaritySearch(currentMessageContent);
 
         // Create the parser - parses the response from the model into http-friendly format
