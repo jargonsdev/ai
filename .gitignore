@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# seed data
+/dev/dictionary.json
+
 # production
 /build
 

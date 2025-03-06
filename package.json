@@ -2,11 +2,13 @@
   "name": "@jargonsdev/ai",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "env-cmd --file .env npx tsx dev/seed.ts"
   },
   "dependencies": {
     "@langchain/openai": "^0.4.4",
@@ -16,6 +18,7 @@
     "next": "15.1.4"
   },
   "devDependencies": {
+    "env-cmd": "^10.1.0",
     "typescript": "5.8.2"
   }
 }
