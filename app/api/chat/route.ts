@@ -1,8 +1,8 @@
+import model from '@/lib/model';
 import { LangChainAdapter } from 'ai';
 import { NextResponse } from 'next/server';
 import { formatMessage } from '@/lib/utils';
 import vectorStore from '@/lib/vector-store';
-import { ChatOpenAI } from '@langchain/openai';
 import { PromptTemplate } from '@langchain/core/prompts';
 import { RunnableSequence } from '@langchain/core/runnables'
 import { formatDocumentsAsString } from 'langchain/util/document';
@@ -45,15 +45,6 @@ export async function POST(req: Request) {
 
         // Create a prompt template
         const prompt = PromptTemplate.fromTemplate(TEMPLATE);
-
-        // Create the model
-        const model = new ChatOpenAI({
-            apiKey: process.env.OPENAI_API_KEY!,
-            model: process.env.CHAT_MODEL!,
-            temperature: 0,
-            streaming: true,
-            verbose: true,
-        });
 
         // Get similar documents from the vector store
         const similarDocs = await vectorStore.similaritySearch(currentMessageContent);
