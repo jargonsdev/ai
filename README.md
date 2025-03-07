@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<div align="center" style="margin-top: 12px">
+  <a href="https://www.jargons.dev">
+    <img width="300" alt="jargons.dev AI" src="https://github.com/user-attachments/assets/5f303e02-eb94-44fa-a8e4-92a2ef0dc77b">
+  </a>
+  <h1><tt>jargons.dev AI (jAI)</tt></h1>
+  <h3>The AI-Powered Assistant for jargons.dev</h3>
+</div>
 
-## Getting Started
+## About 
 
-First, run the development server:
+jAI is a Retrieval-Augmented Generation (RAG) application that integrates the `jargons.dev` dictionary as its core knowledge base. Serving as an API Layer, jAI is enabling other applications within the `jargons.dev` ecosystem.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Tech Stack 
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+jAI is built using the following technologies:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- [Next.js](https://nextjs.org/) - Framework for creating high-quality web applications.
+- [OpenAI API](https://openai.com/api/) - Platform for building AI experiences powered by industry-leading models and tools.
+- [Qdrant](https://qdrant.tech/) - Vector database and similarity search engine for AI applications.
+- [LangChain](https://langchain.com/) - Framework for developing applications powered by large language models (LLMs).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Support 
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Do leave the project a star ⭐️![Uploading jAI.png…]()
