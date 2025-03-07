@@ -3,21 +3,12 @@ import { LangChainAdapter } from "ai";
 import { NextResponse } from "next/server";
 import { formatMessage } from "@/lib/utils";
 import vectorStore from "@/lib/vector-store";
-import { PromptTemplate } from "@langchain/core/prompts";
+import { jAIPrompt as prompt } from "@/lib/jai-prompt";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { formatDocumentsAsString } from "langchain/util/document";
 import { HttpResponseOutputParser } from "langchain/output_parsers";
 
 export const dynamic = "force-dynamic";
-
-const TEMPLATE = `Answer the user's questions based only on the following context. If the answer is not in the context, go ahead and provide answer by looking up your own knowledge directly; State a postscript of your response lightly to the user that the information though was not available in the context.:
-------------------------------
-Context: {context}
-------------------------------
-Current conversation: {chat_history}
-
-user: {question}
-jAI:`;
 
 export async function OPTIONS() {
   return NextResponse.json(
@@ -45,9 +36,6 @@ export async function POST(req: Request) {
     const { messages } = await req.json();
     const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
     const currentMessageContent = messages[messages.length - 1].content;
-
-    // Create a prompt template
-    const prompt = PromptTemplate.fromTemplate(TEMPLATE);
 
     // Get similar documents from the vector store
     const similarDocs = await vectorStore.similaritySearch(
