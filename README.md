@@ -1,8 +1,8 @@
 <div align="center" style="margin-top: 12px">
   <a href="https://www.jargons.dev">
-    <img width="700" alt="jargons.dev AI" src="https://github.com/jargonsdev/jargons.dev/assets/25631971/5d1db25d-18e0-4544-ac98-9aa4e1097e14">
+    <img width="300" alt="jargons.dev AI" src="https://github.com/user-attachments/assets/5f303e02-eb94-44fa-a8e4-92a2ef0dc77b">
   </a>
-  <h1><tt>jAI</tt></h1>
+  <h1><tt>jargons.dev AI (jAI)</tt></h1>
   <h3>The AI-Powered Assistant for jargons.dev</h3>
 </div>
 
@@ -21,4 +21,4 @@ jAI is built using the following technologies:
 
 ## Support 
 
-Do leave the project a star ⭐️
+Do leave the project a star ⭐️![Uploading jAI.png…]()
