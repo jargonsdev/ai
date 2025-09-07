@@ -1,6 +1,5 @@
 > [!NOTE]  
-> 🚨 The `jargonsdev/ai` project has been ported into the main [jargonsdev/jargons.dev](https://github.com/jargonsdev/jargons.dev) repository under the [`apps/jai`](https://github.com/jargonsdev/jargons.dev/tree/main/apps/jai) module.  
-> This repo is now archived and no longer actively maintained.
+> 🚨 The `jargonsdev/ai` project has been ported into the main [jargonsdev/jargons.dev](https://github.com/jargonsdev/jargons.dev) repository under the [`apps/jai`](https://github.com/jargonsdev/jargons.dev/tree/main/apps/jai) module. This repo is now archived and no longer actively maintained.
 
 <div align="center" style="margin-top: 12px">
   <a href="https://www.jargons.dev">
